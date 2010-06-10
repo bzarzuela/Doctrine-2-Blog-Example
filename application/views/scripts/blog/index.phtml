@@ -1,0 +1,7 @@
+<h1>List of Posts</h1>
+<ul>
+<?php foreach ($this->posts as $post): ?>
+	<li><a href="/blog/view/id/<?php echo $post->getId() ?>"><?php echo $post->getTitle() ?></a></li>
+<?php endforeach ?>
+</ul>
+<p><a href="/blog/new">New Post</a></p>
