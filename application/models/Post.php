@@ -5,44 +5,18 @@
 * @Entity
 * @Table(name="posts")
 */
-class D2Test_Model_Post
+class D2Test_Model_Post extends Boz_Model_Doctrine2
 {
 	/** 
 	* @Id @Column(type="integer") 
 	* @GeneratedValue
 	*/
-	private $id;
+	protected $id;
 	
 	/** @Column(length=50) */
-	private $title;
+	protected $title;
 	
 	/** @Column(length=50) */
-	private $body;
+	protected $body;
 	
-	public function getId()
-	{
-		return $this->id;
-	}
-	
-	public function getTitle()
-	{
-		return $this->title;
-	}
-	
-	public function setTitle($val)
-	{
-		$this->title = $val;
-		return $this;
-	}
-	
-	public function getBody()
-	{
-		return $this->body;
-	}
-	
-	public function setBody($val)
-	{
-		$this->body = $val;
-		return $this;
-	}
 }
