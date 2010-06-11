@@ -26,6 +26,8 @@ abstract class Boz_Model_Doctrine2
 					if ($reflection->hasProperty($varName)) {
 						$this->$varName = $args[0];
 						return $this;
+					} else {
+						throw new Exception("This property does not exist: $varName");
 					}
 				}
 				break;
@@ -38,12 +40,18 @@ abstract class Boz_Model_Doctrine2
 					$varName = strtolower(substr($name, 3, 1)) . substr($name, 4);
 					if (isset($this->$varName)) {
 						return $this->$varName;
+					} else {
+						throw new Exception("This property does not exist: $varName");
 					}
 				}
 				break;
 				
 			default:
-				// Do nothing
+				if (method_exists($this, $name)) {
+					return $this->$name;
+				} else {
+					throw new Exception("This method does not exist: $name");
+				}
 				break;
 		}
 	}
