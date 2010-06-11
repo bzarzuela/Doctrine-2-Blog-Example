@@ -37,6 +37,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	
 		$em = EntityManager::create($options['db'], $config);
 		
+		Zend_Registry::set('EntityManager', $em);
+		
 		return $em;
 	}
 }

@@ -2,29 +2,28 @@
 
 class BlogController extends Zend_Controller_Action
 {
-	protected $_em;
-	
-    public function init()
-    {
-        $this->_em = $this->getInvokeArg('bootstrap')->getResource('doctrine');
-    }
-
-	public function postDispatch()
-	{
-		$this->_em->flush();
-	}
-
 	/**
 	 * Lists the blog entries.
 	 *
 	 * @return void
 	 * @author Bryan Zarzuela
 	 */
-    public function indexAction()
+    public function listAction()
     {
-		$posts = $this->_em->createQuery("SELECT p FROM D2Test_Model_Post p")->getResult();
+		$posts = D2Test_Model_Post::findAll();
 		$this->view->posts = $posts;
     }
+
+	/**
+	 * Just forwards the request to list.
+	 *
+	 * @return void
+	 * @author Bryan Zarzuela
+	 */
+	public function indexAction()
+	{
+		$this->_forward('list');
+	}
 
 	/**
 	 * Creates a new blog entry
@@ -38,14 +37,19 @@ class BlogController extends Zend_Controller_Action
 			TODO Use Zend_Form
 		*/
 		
+		
 		if ($this->_request->isPost()) {
 			$post = new D2Test_Model_Post;
-			$post->setTitle($this->_getParam('title'));
-			$post->setBody($this->_getParam('body'));
+			$post->fromArray(array(
+				'title' => $this->_getParam('title'),
+				'body' => $this->_getParam('body'),
+			));
 
-			$this->_em->persist($post);
+			// $em = Zend_Registry::get('EntityManager');
+			// $em->persist($post);
+			// $em->flush();
 			
-			// $this->_redirect('/blog');
+			// $this->_redirect('/blog/list');
 		} 
 		
 	}
