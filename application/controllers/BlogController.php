@@ -45,11 +45,11 @@ class BlogController extends Zend_Controller_Action
 				'body' => $this->_getParam('body'),
 			));
 
-			// $em = Zend_Registry::get('EntityManager');
-			// $em->persist($post);
-			// $em->flush();
+			$em = Zend_Registry::get('EntityManager');
+			$em->persist($post);
+			$em->flush();
 			
-			// $this->_redirect('/blog/list');
+			$this->_redirect('/blog/list');
 		} 
 		
 	}

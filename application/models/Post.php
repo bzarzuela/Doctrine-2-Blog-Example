@@ -4,6 +4,7 @@
 * 
 * @Entity
 * @Table(name="posts")
+* @HasLifecycleCallbacks
 */
 class D2Test_Model_Post extends Boz_Model_Doctrine2
 {
@@ -19,6 +20,9 @@ class D2Test_Model_Post extends Boz_Model_Doctrine2
 	/** @Column(length=50) */
 	protected $body;
 	
+	/** @Column(name="created_at", type="datetime") */
+	protected $createdAt;
+	
 	private $_em;
 	
 	/**
@@ -33,5 +37,31 @@ class D2Test_Model_Post extends Boz_Model_Doctrine2
 	{
 		$em = Zend_Registry::get('EntityManager');
 		return $em->createQuery("SELECT p FROM D2Test_Model_Post p")->getResult();
+	}
+	
+	/**
+	 * Just a convenience function I like to have. 
+	 *
+	 * @param array $values 
+	 * @return $this 
+	 * @author Bryan Zarzuela
+	 */
+	public function fromArray($values)
+	{
+		foreach ($values as $field => $value) {
+			$func = 'set' . ucfirst($field);
+			$this->$func($value);
+		}
+		return $this;
+	}
+	
+	/**
+	 * Initializes the default values of this class before persisting.
+	 *
+	 * @PrePersist
+	 */
+	public function initDefaults()
+	{
+		$this->setCreatedAt(new DateTime());
 	}
 }
