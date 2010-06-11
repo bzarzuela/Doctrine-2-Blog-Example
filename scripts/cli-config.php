@@ -1,24 +1,29 @@
 <?php
 
-$config = new \Doctrine\ORM\Configuration();
-$config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
-$driverImpl = $config->newDefaultAnnotationDriver(array(__DIR__."/../application/models"));
-$config->setMetadataDriverImpl($driverImpl);
+// Define path to application directory
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
-$config->setProxyDir(__DIR__ . '/../application/proxies');
-$config->setProxyNamespace('Proxies');
+// Define application environment
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
+// Ensure library/ is on include_path
+set_include_path(implode(PATH_SEPARATOR, array(
+    realpath(APPLICATION_PATH . '/../library'),
+    get_include_path(),
+)));
 
-// Bootstrap the ZF application here to get the connection options.
+/** Zend_Application */
+require_once 'Zend/Application.php';
 
-$connectionOptions = array(
-    'driver' => 'pdo_mysql',
-	'user' => 'd2test',
-	'password' => 'd2test',
-	'dbname' => 'd2test_dev',
-	'host' => '127.0.0.1',
+// Create application, bootstrap, and run
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . '/configs/application.ini'
 );
 
-$em = \Doctrine\ORM\EntityManager::create($connectionOptions, $config);
+$application->bootstrap('doctrine');
+$em = Zend_Registry::get('EntityManager');
 
 $helpers = array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),

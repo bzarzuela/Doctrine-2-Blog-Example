@@ -1,32 +1,11 @@
 <?php
 
-require_once 'Doctrine/Common/ClassLoader.php';
-
-$classLoader = new \Doctrine\Common\ClassLoader('Doctrine', __DIR__ . '/../library');
-$classLoader->register();
-
-$classLoader = new \Doctrine\Common\ClassLoader('Symfony', __DIR__ . '/../library/vendor');
-$classLoader->register();
-
-$configFile = getcwd() . DIRECTORY_SEPARATOR . 'cli-config.php';
+require 'cli-config.php';
 
 $helperSet = new \Symfony\Components\Console\Helper\HelperSet();
-if (file_exists($configFile)) {
-    if ( ! is_readable($configFile)) {
-        trigger_error(
-            'Configuration file [' . $configFile . '] does not have read permission.', E_ERROR
-        );
-    }
-
-    require $configFile;
-    
     foreach ($helpers as $name => $helper) {
 	    $helperSet->set($helper, $name);
 	}
-	
-}
-
-
 
 $cli = new \Symfony\Components\Console\Application('Doctrine Command Line Interface', Doctrine\Common\Version::VERSION);
 $cli->setCatchExceptions(true);
