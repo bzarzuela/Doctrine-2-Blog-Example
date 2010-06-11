@@ -10,7 +10,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	{
 		$config = new Configuration;
 		
-		$cache = new \Doctrine\Common\Cache\ApcCache;
+		switch (APPLICATION_ENV) {
+		case 'production':
+		case 'staging':
+			$cache = new \Doctrine\Common\Cache\ApcCache;
+			break;
+			
+		// Both development and test environments will use array cache.
+		default:
+			$cache = new \Doctrine\Common\Cache\ArrayCache;
+			break;
+		}
+		
 		$config->setMetadataCacheImpl($cache);
 		
 		$driverImpl = $config->newDefaultAnnotationDriver(APPLICATION_PATH . '/models');
