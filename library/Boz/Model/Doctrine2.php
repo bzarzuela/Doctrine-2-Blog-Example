@@ -4,6 +4,14 @@
 */
 abstract class Boz_Model_Doctrine2
 {
+	/**
+	 * Implements magic setters and getters
+	 *
+	 * @param string $name 
+	 * @param string $args 
+	 * @return void
+	 * @author Bryan Zarzuela
+	 */
 	public function __call($name, $args)
 	{
 		$prefix = substr($name, 0, 3);
